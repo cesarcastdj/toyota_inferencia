@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagnóstico Vehicular Toyota Corolla</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+            background: #f8f8f8;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            background: #2c5282;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #2b6cb0;
+        }
+
+        #result {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-buttons {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .feedback-buttons button {
+            margin-right: 1rem;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #2c5282;
+            margin: 1rem 0;
+        }
+
+        .categories {
+            margin: 1rem 0;
+            padding: 0.5rem;
+            background: #ebf8ff;
+            border-radius: 4px;
+        }
+
+        .categories span {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            margin: 0.25rem;
+            background: #bee3f8;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .recommendation {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            border-radius: 4px;
+        }
+
+        .diagnosis-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .diagnosis-list li {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: #f7fafc;
+            border-radius: 4px;
+        }
+
+        /* Estilos para las notificaciones */
+        .notification-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 300px;
+            max-width: 400px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s ease-out;
+            cursor: pointer;
+        }
+
+        .notification.success {
+            background-color: #48bb78;
+        }
+
+        .notification.error {
+            background-color: #f56565;
+        }
+
+        .notification-content {
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .notification.hide {
+            animation: slideOut 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Motor de Inferencia Toyota</h1>
+    <p>Describe la falla del vehículo:</p>
+    <textarea id="input" placeholder="Ej: el motor hace un ruido extraño y huele a quemado..."></textarea>
+    <br>
+    <button onclick="diagnose()">Diagnosticar</button>
+
+    <div id="result"></div>
+    <div id="feedback" class="feedback-buttons">
+        <p>¿Fue útil este diagnóstico?</p>
+        <button onclick="giveFeedback(true)">Sí</button>
+        <button onclick="giveFeedback(false)">No</button>
+    </div>
+
+    <!-- Contenedor de notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script>
+        let lastDiagnosis = null;
+
+        async function diagnose() {
+            const input = document.getElementById('input').value;
+            if (!input.trim()) {
+                showNotification('Por favor, describe el problema del vehículo', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/diagnose', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input })
+                });
+                const data = await response.json();
+                lastDiagnosis = data;
+
+                let resultHtml = '<h2>Resultado del Diagnóstico</h2>';
+
+                // Mostrar puntuación
+                resultHtml += `<p class="score">Nivel de Confianza: ${data.puntuación}</p>`;
+
+                // Mostrar categorías detectadas
+                if (data.categorías && data.categorías.length > 0) {
+                    resultHtml += '<div class="categories"><strong>Áreas afectadas:</strong> ';
+                    data.categorías.forEach(cat => {
+                        resultHtml += `<span>${cat}</span>`;
+                    });
+                    resultHtml += '</div>';
+                }
+
+                // Mostrar recomendación general
+                if (data.recomendación_general) {
+                    resultHtml += `<div class="recommendation">${data.recomendación_general}</div>`;
+                }
+
+                // Mostrar diagnósticos específicos
+                if (Array.isArray(data.diagnóstico)) {
+                    resultHtml += '<h3>Diagnósticos Específicos:</h3><ul class="diagnosis-list">';
+                    data.diagnóstico.forEach(d => {
+                        resultHtml += `<li>${d}</li>`;
+                    });
+                    resultHtml += '</ul>';
+                } else {
+                    resultHtml += `<p>${data.diagnóstico}</p>`;
+                }
+
+                document.getElementById('result').innerHTML = resultHtml;
+                document.getElementById('feedback').style.display = 'block';
+            } catch (error) {
+                console.error('Error al realizar el diagnóstico:', error);
+                showNotification('Error al procesar el diagnóstico', 'error');
+            }
+        }
+
+        async function giveFeedback(wasHelpful) {
+            if (!lastDiagnosis) return;
+
+            try {
+                await fetch('/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        diagnosis: lastDiagnosis,
+                        wasHelpful: wasHelpful
+                    })
+                });
+                showNotification('¡Gracias por tu retroalimentación!', 'success');
+            } catch (error) {
+                console.error('Error al enviar retroalimentación:', error);
+                showNotification('Error al enviar la retroalimentación', 'error');
+            }
+        }
+
+        // Sistema de notificaciones
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            notification.innerHTML = `
+                <div class="notification-content">${message}</div>
+                <button class="notification-close">&times;</button>
+            `;
+
+            container.appendChild(notification);
+
+            // Agregar evento para cerrar la notificación
+            const closeButton = notification.querySelector('.notification-close');
+            closeButton.addEventListener('click', () => {
+                notification.classList.add('hide');
+                setTimeout(() => {
+                    container.removeChild(notification);
+                }, 500);
+            });
+
+            // Auto-cerrar después de 5 segundos
+            setTimeout(() => {
+                if (notification.parentNode === container) {
+                    notification.classList.add('hide');
+                    setTimeout(() => {
+                        if (notification.parentNode === container) {
+                            container.removeChild(notification);
+                        }
+                    }, 500);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>
