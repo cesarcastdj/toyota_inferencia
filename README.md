@@ -2,7 +2,7 @@
 
 Sistema de diagnóstico basado en reglas para Toyota Corolla que utiliza un motor de inferencia para analizar descripciones de fallas y proporcionar diagnósticos preliminares.
 
-> Este sistemas de motor de inferencia necesita ser entrenado desde si algoritmo de origen, esta en modo de pruebas y test por ahora.
+> Este sistema de motor de inferencia necesita ser entrenado desde su algoritmo de origen, esta en modo de pruebas y test por ahora.
 
 ## Características Actuales ✨
 
@@ -105,4 +105,4 @@ toyota_inferencia/
    - [ ] Chat en vivo con técnicos
    - [ ] Sistema de citas para servicio
 
-## <Cesar-Dev/>
+## Cesar-Dev
