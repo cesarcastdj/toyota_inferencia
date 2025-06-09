@@ -2,6 +2,8 @@
 
 Sistema de diagnóstico basado en reglas para Toyota Corolla que utiliza un motor de inferencia para analizar descripciones de fallas y proporcionar diagnósticos preliminares.
 
+> Este sistemas de motor de inferencia necesita ser entrenado desde si algoritmo de origen, esta en modo de pruebas y test por ahora.
+
 ## Características Actuales ✨
 
 - Motor de inferencia basado en reglas con sistema de puntuación
@@ -103,20 +105,4 @@ toyota_inferencia/
    - [ ] Chat en vivo con técnicos
    - [ ] Sistema de citas para servicio
 
-## Contribuir 🤝
-
-1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abrir un Pull Request
-
-## Licencia 📄
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
-
-## Contacto 📧
-
-Tu Nombre - [@tutwitter](https://twitter.com/tutwitter) - email@ejemplo.com
-
-Link del Proyecto: [https://github.com/tu-usuario/toyota_inferencia](https://github.com/tu-usuario/toyota_inferencia) 
+## <Cesar-Dev/>
