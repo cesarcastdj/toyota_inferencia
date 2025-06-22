@@ -1,0 +1,852 @@
+/* Reset básico y configuración general */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 1rem;
+    background-color: #2b2828;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgb(194, 194, 194);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(149, 149, 149, 0.1);
+    padding: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+button {
+    outline: none;
+}
+
+/* Títulos */
+h1 {
+    color: #2d3748;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+h2 {
+    color: #2d3748;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+h3 {
+    color: #4a5568;
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
+}
+
+p {
+    color: #4a5568;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Navegación por pestañas */
+.tab-navigation {
+    display: flex;
+    background: #f7fafc;
+    border-radius: 12px;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-button {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tab-button:hover {
+    background: #edf2f7;
+    color: #2d3748;
+    transform: none;
+    box-shadow: none;
+}
+
+.tab-button.active {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+.tab-icon {
+    font-size: 1.2rem;
+}
+
+/* Contenido de pestañas */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Formulario dinámico */
+.form-step {
+    display: none;
+    animation: slideIn 0.3s ease-out;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.form-step h3 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2d3748;
+    font-size: 1.5rem;
+}
+
+/* Grid de botones de categorías */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.category-btn {
+    padding: 1.5rem 1rem;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 100px;
+}
+
+.category-btn:hover {
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+    border-color: #4299e1;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(66, 153, 225, 0.2);
+}
+
+.btn-icon {
+    font-size: 2rem;
+}
+
+/* Botones de problemas y síntomas */
+.problem-buttons,
+.symptoms-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.problem-btn,
+.symptom-btn {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2d3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.problem-btn:hover,
+.symptom-btn:hover {
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+    border-color: #4299e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.2);
+}
+
+.symptom-btn.selected {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border-color: #3182ce;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+/* Botones de navegación */
+.step-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.back-btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #2d3748;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(113, 128, 150, 0.3);
+}
+
+.diagnose-btn {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.diagnose-btn:hover {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+}
+
+/* Formulario */
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+textarea::placeholder {
+    color: #a0aec0;
+}
+
+/* Botones */
+button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Resultados */
+#result {
+    margin-top: 2rem;
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Puntuación */
+.score {
+    font-weight: bold;
+    color: #4299e1;
+    margin: 1rem 0;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 0.5rem;
+    background: #ebf8ff;
+    border-radius: 8px;
+}
+
+/* Categorías */
+.categories {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #ebf8ff;
+    border-radius: 8px;
+    border: 1px solid #bee3f8;
+}
+
+.categories strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2b6cb0;
+}
+
+.categories span {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    background: #bee3f8;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2b6cb0;
+    border: 1px solid #90cdf4;
+}
+
+/* Recomendación */
+.recommendation {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f0fff4;
+    border-left: 4px solid #48bb78;
+    border-radius: 8px;
+    color: #22543d;
+    font-weight: 500;
+}
+
+/* Lista de diagnósticos */
+.diagnosis-list {
+    list-style: none;
+    padding: 0;
+}
+
+.diagnosis-list li {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #2d3748;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.diagnosis-list li:hover {
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+    border-color: #4299e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.15);
+}
+
+.diagnosis-list li::before {
+    content: "🔍";
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    opacity: 0.7;
+}
+
+.diagnosis-list li {
+    padding-left: 3rem;
+}
+
+/* Feedback */
+.feedback-buttons {
+    margin-top: 1.5rem;
+    display: none;
+    text-align: center;
+    padding: 1rem;
+    background: #f7fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.feedback-buttons p {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.feedback-buttons button {
+    margin: 0 0.5rem;
+    min-width: 80px;
+}
+
+.feedback-buttons button:first-of-type {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.feedback-buttons button:first-of-type:hover {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+}
+
+.feedback-buttons button:last-of-type {
+    background: linear-gradient(135deg, #993e3e 0%, #e53e3e 100%);
+}
+
+.feedback-buttons button:last-of-type:hover {
+    background: linear-gradient(135deg, #993e3e 0%, #c53030 100%);
+}
+
+/* Notificaciones */
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    padding: 1rem 1.5rem;
+    margin: 10px 0;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 280px;
+    max-width: 400px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.5s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+.notification.success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.notification.error {
+    background: linear-gradient(135deg, #993e3e 0%, #e53e3e 100%);
+}
+
+.notification-content {
+    flex-grow: 1;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.notification.hide {
+    animation: slideOut 0.5s ease-out forwards;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
+
+    .container {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .tab-navigation {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .tab-button {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .button-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .category-btn {
+        padding: 1rem 0.8rem;
+        min-height: 80px;
+        font-size: 0.9rem;
+    }
+
+    .btn-icon {
+        font-size: 1.5rem;
+    }
+
+    .problem-buttons,
+    .symptoms-buttons {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .problem-btn,
+    .symptom-btn {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    textarea {
+        height: 120px;
+        padding: 0.8rem;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .feedback-buttons button {
+        width: auto;
+        margin: 0 0.25rem;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .categories span {
+        display: block;
+        margin: 0.25rem 0;
+        text-align: center;
+    }
+
+    .notification {
+        min-width: 250px;
+        max-width: 90vw;
+        right: 10px;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    .notification-container {
+        right: 10px;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    .step-buttons {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .back-btn,
+    .diagnose-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-btn {
+        min-height: 70px;
+        font-size: 0.85rem;
+    }
+
+    .btn-icon {
+        font-size: 1.3rem;
+    }
+
+    textarea {
+        height: 100px;
+        font-size: 0.95rem;
+    }
+
+    button {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+
+    #result {
+        padding: 1rem;
+    }
+
+    .score {
+        font-size: 1.1rem;
+    }
+
+    .categories {
+        padding: 0.8rem;
+    }
+
+    .recommendation {
+        padding: 0.8rem;
+    }
+
+    .diagnosis-list li {
+        padding: 0.8rem;
+    }
+
+    .notification {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mejoras para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+        padding: 2.5rem;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    textarea {
+        height: 140px;
+    }
+
+    .button-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Mejoras para pantallas grandes */
+@media (min-width: 1025px) {
+    .container {
+        max-width: 900px;
+        padding: 3rem;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+    }
+
+    textarea {
+        height: 160px;
+    }
+
+    .button-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Historial de selecciones */
+.selection-history {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.selection-history h4 {
+    color: #495057;
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.history-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #4299e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.history-icon {
+    font-size: 1.2rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+.history-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 80px;
+}
+
+.history-value {
+    color: #2d3748;
+    font-weight: 500;
+    flex: 1;
+}
+
+.history-placeholder {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Responsive para historial */
+@media (max-width: 768px) {
+    .selection-history {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .history-label {
+        min-width: auto;
+        font-size: 0.9rem;
+    }
+
+    .history-value {
+        font-size: 0.95rem;
+        padding-left: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .selection-history {
+        padding: 0.8rem;
+    }
+
+    .selection-history h4 {
+        font-size: 1.1rem;
+    }
+
+    .history-item {
+        padding: 0.6rem;
+    }
+
+    .history-icon {
+        font-size: 1rem;
+    }
+
+    .history-label {
+        font-size: 0.85rem;
+    }
+
+    .history-value {
+        font-size: 0.9rem;
+        padding-left: 1.5rem;
+    }
+}

@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify, render_template
+# -*- coding: utf-8 -*-
+
+from flask import Flask, request, jsonify, render_template, url_for
 from inference_engine import diagnose_input
 import json
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 # Archivo para guardar la retroalimentación
 FEEDBACK_FILE = 'feedback.json'
@@ -48,4 +50,4 @@ def feedback():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)

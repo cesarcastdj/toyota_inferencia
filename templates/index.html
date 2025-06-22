@@ -5,193 +5,111 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Diagnóstico Vehicular Toyota Corolla</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 2rem;
-            background: #f8f8f8;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin-top: 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            background: #2c5282;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-
-        button:hover {
-            background: #2b6cb0;
-        }
-
-        #result {
-            margin-top: 2rem;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .feedback-buttons {
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .feedback-buttons button {
-            margin-right: 1rem;
-        }
-
-        .score {
-            font-weight: bold;
-            color: #2c5282;
-            margin: 1rem 0;
-        }
-
-        .categories {
-            margin: 1rem 0;
-            padding: 0.5rem;
-            background: #ebf8ff;
-            border-radius: 4px;
-        }
-
-        .categories span {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            margin: 0.25rem;
-            background: #bee3f8;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .recommendation {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: #f0fff4;
-            border-left: 4px solid #48bb78;
-            border-radius: 4px;
-        }
-
-        .diagnosis-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .diagnosis-list li {
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            background: #f7fafc;
-            border-radius: 4px;
-        }
-
-        /* Estilos para las notificaciones */
-        .notification-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .notification {
-            padding: 15px 20px;
-            margin: 10px 0;
-            border-radius: 4px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-width: 300px;
-            max-width: 400px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.5s ease-out;
-            cursor: pointer;
-        }
-
-        .notification.success {
-            background-color: #48bb78;
-        }
-
-        .notification.error {
-            background-color: #f56565;
-        }
-
-        .notification-content {
-            flex-grow: 1;
-            margin-right: 15px;
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0;
-            margin: 0;
-            opacity: 0.8;
-        }
-
-        .notification-close:hover {
-            opacity: 1;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
-        .notification.hide {
-            animation: slideOut 0.5s ease-out forwards;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
 <body>
-    <h1>Motor de Inferencia Toyota</h1>
-    <p>Describe la falla del vehículo:</p>
-    <textarea id="input" placeholder="Ej: el motor hace un ruido extraño y huele a quemado..."></textarea>
-    <br>
-    <button onclick="diagnose()">Diagnosticar</button>
+    <div class="container">
+        <h1>Motor de Inferencia Toyota Corolla</h1>
 
-    <div id="result"></div>
-    <div id="feedback" class="feedback-buttons">
-        <p>¿Fue útil este diagnóstico?</p>
-        <button onclick="giveFeedback(true)">Sí</button>
-        <button onclick="giveFeedback(false)">No</button>
+        <!-- Navegación por pestañas -->
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('chat')" id="chat-tab">
+                <span class="tab-icon">💬</span>
+                Chat Libre
+            </button>
+            <button class="tab-button" onclick="switchTab('form')" id="form-tab">
+                <span class="tab-icon">📋</span>
+                Formulario Guiado
+            </button>
+        </div>
+
+        <!-- Contenido del Chat -->
+        <div class="tab-content active" id="chat-content">
+            <p>Describe la falla del vehículo con tus propias palabras:</p>
+            <textarea id="input" placeholder="Ej: el motor hace un ruido extraño y huele a quemado..."></textarea>
+            <br>
+            <button onclick="diagnose()">Diagnosticar</button>
+        </div>
+
+        <!-- Contenido del Formulario Dinámico -->
+        <div class="tab-content" id="form-content">
+            <!-- Historial de selecciones -->
+            <div class="selection-history" id="selection-history">
+                <h4>📋 Historial de Selecciones:</h4>
+                <div class="history-items" id="history-items">
+                    <span class="history-placeholder">Ninguna selección realizada</span>
+                </div>
+            </div>
+
+            <div class="form-step active" id="step-1">
+                <h3>¿Qué sistema tiene problemas?</h3>
+                <div class="button-grid">
+                    <button class="category-btn" onclick="selectCategory('motor')">
+                        <span class="btn-icon">🔧</span>
+                        Motor
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('frenos')">
+                        <span class="btn-icon">🛑</span>
+                        Frenos
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('transmisión')">
+                        <span class="btn-icon">⚙️</span>
+                        Transmisión
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('suspensión')">
+                        <span class="btn-icon">🚗</span>
+                        Suspensión
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('eléctrico')">
+                        <span class="btn-icon">⚡</span>
+                        Sistema Eléctrico
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('combustible')">
+                        <span class="btn-icon">⛽</span>
+                        Combustible
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('refrigeración')">
+                        <span class="btn-icon">🌡️</span>
+                        Refrigeración
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('dirección')">
+                        <span class="btn-icon">🎯</span>
+                        Dirección
+                    </button>
+                    <button class="category-btn" onclick="selectCategory('neumáticos')">
+                        <span class="btn-icon">🛞</span>
+                        Neumáticos
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-step" id="step-2">
+                <h3>¿Qué problema específico tienes?</h3>
+                <div class="problem-buttons" id="problem-buttons">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                <button class="back-btn" onclick="goBack()">← Volver</button>
+            </div>
+
+            <div class="form-step" id="step-3">
+                <h3>¿Hay síntomas adicionales?</h3>
+                <div class="symptoms-buttons" id="symptoms-buttons">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                <div class="step-buttons">
+                    <button class="back-btn" onclick="goBack()">← Volver</button>
+                    <button class="diagnose-btn" onclick="diagnoseFromForm()">Diagnosticar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="result"></div>
+        <div id="feedback" class="feedback-buttons">
+            <p>¿Fue útil este diagnóstico?</p>
+            <button onclick="giveFeedback(true)">Sí</button>
+            <button onclick="giveFeedback(false)">No</button>
+        </div>
     </div>
 
     <!-- Contenedor de notificaciones -->
@@ -199,19 +117,301 @@
 
     <script>
         let lastDiagnosis = null;
+        let currentStep = 1;
+        let selectedCategory = '';
+        let selectedProblem = '';
+        let selectedSymptoms = [];
 
-        async function diagnose() {
-            const input = document.getElementById('input').value;
-            if (!input.trim()) {
-                showNotification('Por favor, describe el problema del vehículo', 'error');
+        // Datos del formulario dinámico - ACTUALIZADO
+        const formData = {
+            motor: {
+                problems: {
+                    'ruido extraño': ['escape', 'válvulas', 'pistones', 'knock', 'martilleo'],
+                    'no enciende': ['batería', 'motor de arranque', 'combustible', 'bujías'],
+                    'sobrecalentamiento': ['refrigerante', 'termostato', 'ventilador'],
+                    'vibración': ['soportes', 'rpm', 'balanceo'],
+                    'pérdida de potencia': ['filtros', 'inyectores', 'compresión'],
+                    'olor a quemado': ['sobrecalentamiento', 'problema eléctrico', 'fuga de aceite'],
+                    'consume aceite': ['sellos', 'juntas', 'desgaste de pistones'],
+                    'problema de escape': ['rotura', 'desgaste', 'sistema de escape']
+                }
+            },
+            frenos: {
+                problems: {
+                    'pedal suave': ['líquido', 'aire', 'fugas'],
+                    'chirrido al frenar': ['pastillas', 'discos', 'desgaste'],
+                    'vibración al frenar': ['discos', 'alineación', 'desbalance'],
+                    'no frena bien': ['pastillas', 'líquido', 'sistema hidráulico'],
+                    'luz de frenos': ['nivel de líquido', 'pastillas', 'sensores'],
+                    'frenado deficiente': ['pastillas', 'discos', 'líquido de frenos']
+                }
+            },
+            transmisión: {
+                problems: {
+                    'cambios difíciles': ['embrague', 'sincronizadores', 'líquido'],
+                    'patina': ['embrague', 'discos', 'desgaste'],
+                    'ruidos en cambios': ['rodamientos', 'engranajes', 'sincronizadores'],
+                    'pérdida de líquido': ['sellos', 'juntas', 'fugas'],
+                    'problema de embrague': ['disco', 'plato', 'cojinete'],
+                    'transmisión automática': ['líquido', 'sensores', 'válvulas']
+                }
+            },
+            suspensión: {
+                problems: {
+                    'golpes': ['amortiguadores', 'resortes', 'bujes'],
+                    'rebota': ['amortiguadores', 'resortes', 'desgaste'],
+                    'ruidos en suspensión': ['bujes', 'terminales', 'amortiguadores'],
+                    'inestable': ['alineación', 'balanceo', 'neumáticos'],
+                    'problema de amortiguadores': ['desgaste', 'fugas', 'funcionamiento'],
+                    'problema de resortes': ['rotura', 'desgaste', 'debilitamiento']
+                }
+            },
+            eléctrico: {
+                problems: {
+                    'no arranca': ['batería', 'motor de arranque', 'cables'],
+                    'luces débiles': ['batería', 'alternador', 'regulador'],
+                    'problema de batería': ['carga', 'terminales', 'cables'],
+                    'problema de alternador': ['fallo', 'regulador', 'sistema de carga'],
+                    'cortocircuito': ['cables', 'conectores', 'componentes'],
+                    'fusibles quemados': ['fusibles', 'sistema eléctrico']
+                }
+            },
+            combustible: {
+                problems: {
+                    'no arranca': ['bomba', 'filtro', 'inyectores'],
+                    'pérdida de potencia': ['filtro', 'bomba', 'presión'],
+                    'consumo alto': ['inyectores', 'filtro', 'sensor'],
+                    'olor a gasolina': ['fugas', 'líneas', 'tanque'],
+                    'problema de bomba': ['fallo', 'filtro', 'presión'],
+                    'problema de inyectores': ['limpieza', 'funcionamiento', 'reemplazo']
+                }
+            },
+            refrigeración: {
+                problems: {
+                    'sobrecalentamiento': ['refrigerante', 'termostato', 'ventilador'],
+                    'nivel bajo de refrigerante': ['fugas', 'nivel', 'calidad'],
+                    'problema de termostato': ['fallo', 'regulación', 'temperatura'],
+                    'ventilador no funciona': ['funcionamiento', 'motor', 'cables'],
+                    'problema de radiador': ['obstrucción', 'fuga', 'daño'],
+                    'fuga de refrigerante': ['mangueras', 'conectores', 'radiador']
+                }
+            },
+            dirección: {
+                problems: {
+                    'dirección dura': ['líquido', 'bomba', 'componentes'],
+                    'necesita alineación': ['alineación', 'ruedas delanteras'],
+                    'necesita balanceo': ['balanceo', 'ruedas'],
+                    'volante vibra': ['balanceo', 'neumáticos', 'alineación'],
+                    'problema de dirección': ['líquido', 'bomba', 'componentes'],
+                    'desalineado': ['alineación', 'suspensión', 'neumáticos']
+                }
+            },
+            neumáticos: {
+                problems: {
+                    'presión baja': ['presión', 'aire', 'inflado'],
+                    'desgaste irregular': ['alineación', 'balanceo', 'suspensión'],
+                    'neumáticos lisos': ['desgaste', 'reemplazo'],
+                    'vibración en ruedas': ['balanceo', 'alineación', 'neumáticos'],
+                    'daño en neumáticos': ['cortes', 'bultos', 'desgaste'],
+                    'ruido de neumáticos': ['desgaste', 'presión', 'alineación']
+                }
+            }
+        };
+
+        // Navegación entre pestañas
+        function switchTab(tab) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Desactivar todos los botones
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostrar contenido seleccionado
+            document.getElementById(tab + '-content').classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+
+            // Resetear formulario si cambiamos a chat
+            if (tab === 'chat') {
+                resetForm();
+            }
+        }
+
+        // Seleccionar categoría
+        function selectCategory(category) {
+            selectedCategory = category;
+            currentStep = 2;
+
+            // Actualizar historial
+            updateHistory();
+
+            // Mostrar problemas de la categoría
+            const problems = Object.keys(formData[category].problems);
+            const problemButtons = document.getElementById('problem-buttons');
+            problemButtons.innerHTML = '';
+
+            problems.forEach(problem => {
+                const btn = document.createElement('button');
+                btn.className = 'problem-btn';
+                btn.onclick = () => selectProblem(problem);
+                btn.innerHTML = `
+                    <span class="btn-text">${problem}</span>
+                `;
+                problemButtons.appendChild(btn);
+            });
+
+            // Cambiar a paso 2
+            showStep(2);
+        }
+
+        // Seleccionar problema
+        function selectProblem(problem) {
+            selectedProblem = problem;
+            currentStep = 3;
+
+            // Actualizar historial
+            updateHistory();
+
+            // Mostrar síntomas adicionales
+            const symptoms = formData[selectedCategory].problems[problem];
+            const symptomsButtons = document.getElementById('symptoms-buttons');
+            symptomsButtons.innerHTML = '';
+
+            symptoms.forEach(symptom => {
+                const btn = document.createElement('button');
+                btn.className = 'symptom-btn';
+                btn.onclick = () => toggleSymptom(symptom, btn);
+                btn.innerHTML = `
+                    <span class="btn-text">${symptom}</span>
+                `;
+                symptomsButtons.appendChild(btn);
+            });
+
+            // Cambiar a paso 3
+            showStep(3);
+        }
+
+        // Alternar síntoma
+        function toggleSymptom(symptom, button) {
+            if (selectedSymptoms.includes(symptom)) {
+                selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
+                button.classList.remove('selected');
+            } else {
+                selectedSymptoms.push(symptom);
+                button.classList.add('selected');
+            }
+
+            // Actualizar historial
+            updateHistory();
+        }
+
+        // Actualizar historial visual
+        function updateHistory() {
+            const historyContainer = document.getElementById('history-items');
+            let historyHtml = '';
+
+            if (selectedCategory) {
+                historyHtml += `<div class="history-item">
+                    <span class="history-icon">🔧</span>
+                    <span class="history-label">Sistema:</span>
+                    <span class="history-value">${getCategoryDisplayName(selectedCategory)}</span>
+                </div>`;
+            }
+
+            if (selectedProblem) {
+                historyHtml += `<div class="history-item">
+                    <span class="history-icon">⚠️</span>
+                    <span class="history-label">Problema:</span>
+                    <span class="history-value">${selectedProblem}</span>
+                </div>`;
+            }
+
+            if (selectedSymptoms.length > 0) {
+                historyHtml += `<div class="history-item">
+                    <span class="history-icon">🔍</span>
+                    <span class="history-label">Síntomas:</span>
+                    <span class="history-value">${selectedSymptoms.join(', ')}</span>
+                </div>`;
+            }
+
+            if (historyHtml === '') {
+                historyHtml = '<span class="history-placeholder">Ninguna selección realizada</span>';
+            }
+
+            historyContainer.innerHTML = historyHtml;
+        }
+
+        // Obtener nombre de visualización de categoría
+        function getCategoryDisplayName(category) {
+            const displayNames = {
+                'motor': 'Motor',
+                'frenos': 'Frenos',
+                'transmisión': 'Transmisión',
+                'suspensión': 'Suspensión',
+                'eléctrico': 'Sistema Eléctrico',
+                'combustible': 'Combustible',
+                'refrigeración': 'Refrigeración',
+                'dirección': 'Dirección',
+                'neumáticos': 'Neumáticos'
+            };
+            return displayNames[category] || category;
+        }
+
+        // Mostrar paso específico
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step-' + step).classList.add('active');
+            currentStep = step;
+        }
+
+        // Volver atrás
+        function goBack() {
+            if (currentStep === 3) {
+                showStep(2);
+                selectedSymptoms = [];
+            } else if (currentStep === 2) {
+                showStep(1);
+                selectedProblem = '';
+            }
+        }
+
+        // Resetear formulario
+        function resetForm() {
+            currentStep = 1;
+            selectedCategory = '';
+            selectedProblem = '';
+            selectedSymptoms = [];
+            showStep(1);
+            updateHistory(); // Limpiar historial
+        }
+
+        // Diagnosticar desde formulario
+        function diagnoseFromForm() {
+            if (!selectedCategory || !selectedProblem) {
+                showNotification('Por favor completa todos los pasos', 'error');
                 return;
             }
 
+            // Construir descripción basada en selecciones
+            let description = `Problema en ${selectedCategory}: ${selectedProblem}`;
+            if (selectedSymptoms.length > 0) {
+                description += `. Síntomas adicionales: ${selectedSymptoms.join(', ')}`;
+            }
+
+            // Usar el motor de inferencia existente
+            diagnoseWithText(description);
+        }
+
+        // Función original de diagnóstico (renombrada)
+        async function diagnoseWithText(inputText) {
             try {
                 const response = await fetch('/diagnose', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ input })
+                    body: JSON.stringify({ input: inputText })
                 });
                 const data = await response.json();
                 lastDiagnosis = data;
@@ -247,15 +447,44 @@
                 }
 
                 document.getElementById('result').innerHTML = resultHtml;
-                document.getElementById('feedback').style.display = 'block';
+
+                // Reactivar y mostrar los botones de feedback
+                const feedbackSection = document.getElementById('feedback');
+                feedbackSection.style.display = 'block';
+
+                // Rehabilitar los botones
+                const feedbackButtons = feedbackSection.querySelectorAll('button');
+                feedbackButtons.forEach(button => {
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                    button.style.cursor = 'pointer';
+                });
             } catch (error) {
                 console.error('Error al realizar el diagnóstico:', error);
                 showNotification('Error al procesar el diagnóstico', 'error');
             }
         }
 
+        // Función de diagnóstico original (para chat)
+        async function diagnose() {
+            const input = document.getElementById('input').value;
+            if (!input.trim()) {
+                showNotification('Por favor, describe el problema del vehículo', 'error');
+                return;
+            }
+            await diagnoseWithText(input);
+        }
+
         async function giveFeedback(wasHelpful) {
             if (!lastDiagnosis) return;
+
+            // Deshabilitar ambos botones para evitar múltiples envíos
+            const feedbackButtons = document.querySelectorAll('#feedback button');
+            feedbackButtons.forEach(button => {
+                button.disabled = true;
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+            });
 
             try {
                 await fetch('/feedback', {
@@ -267,9 +496,19 @@
                     })
                 });
                 showNotification('¡Gracias por tu retroalimentación!', 'success');
+
+                // Ocultar completamente la sección de feedback después de enviar
+                document.getElementById('feedback').style.display = 'none';
             } catch (error) {
                 console.error('Error al enviar retroalimentación:', error);
                 showNotification('Error al enviar la retroalimentación', 'error');
+
+                // Rehabilitar botones en caso de error
+                feedbackButtons.forEach(button => {
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                    button.style.cursor = 'pointer';
+                });
             }
         }
 
@@ -281,19 +520,9 @@
 
             notification.innerHTML = `
                 <div class="notification-content">${message}</div>
-                <button class="notification-close">&times;</button>
             `;
 
             container.appendChild(notification);
-
-            // Agregar evento para cerrar la notificación
-            const closeButton = notification.querySelector('.notification-close');
-            closeButton.addEventListener('click', () => {
-                notification.classList.add('hide');
-                setTimeout(() => {
-                    container.removeChild(notification);
-                }, 500);
-            });
 
             // Auto-cerrar después de 5 segundos
             setTimeout(() => {
