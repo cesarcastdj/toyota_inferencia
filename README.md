@@ -23,7 +23,7 @@ Sistema de diagnóstico basado en reglas para Toyota Corolla que utiliza un moto
 
 1. Clonar el repositorio:
 ```bash
-git clone https://github.com/tu-usuario/toyota_inferencia.git
+git clone https://github.com/cesarcastdj/toyota_inferencia.git
 cd toyota_inferencia
 ```
 
